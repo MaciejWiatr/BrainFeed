@@ -1,7 +1,5 @@
-import { BlurView } from "@react-native-community/blur";
 import React from "react";
 import {
-	Button,
 	StyleSheet,
 	Text,
 	TextInput,
@@ -12,13 +10,15 @@ import {
 const FeedForm = () => {
 	return (
 		<View style={styles.formContainer}>
-			<TextInput
-				placeholder="Some fancy url ✨"
-				style={styles.formInput}
-			/>
-			<TouchableOpacity style={styles.formButton}>
-				<Text style={styles.formButtonText}>Send</Text>
-			</TouchableOpacity>
+			<View style={styles.formWrapper}>
+				<TextInput
+					placeholder="Some fancy url ✨"
+					style={styles.formInput}
+				/>
+				<TouchableOpacity style={styles.formButton}>
+					<Text style={styles.formButtonText}>Send</Text>
+				</TouchableOpacity>
+			</View>
 		</View>
 	);
 };
@@ -27,31 +27,38 @@ export default FeedForm;
 
 const styles = StyleSheet.create({
 	formContainer: {
+		width: "100%",
 		position: "absolute",
 		bottom: 10,
-		marginHorizontal: 10,
+		paddingHorizontal: 15,
 		overflow: "hidden",
-		backgroundColor: "rgba(255,255,255,0.9)",
 		height: 75,
+		maxWidth: 500,
+	},
+	formWrapper: {
+		borderRadius: 10,
+		borderWidth: 0.5,
+		borderColor: "lightgray",
+		padding: 15,
+		paddingHorizontal: 15,
+		backgroundColor: "rgba(255,255,255,0.9)",
 		display: "flex",
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 15,
-		paddingHorizontal: 15,
 		justifyContent: "space-between",
-		borderRadius: 10,
+		height: "100%",
 	},
 	formInput: {
 		width: "77%",
 		height: "100%",
-		borderRadius: 10,
+		borderRadius: 5,
 		paddingHorizontal: 20,
 		backgroundColor: "#eeeeee",
 	},
 	formButton: {
 		width: "20%",
 		backgroundColor: "black",
-		borderRadius: 10,
+		borderRadius: 5,
 		height: "100%",
 		display: "flex",
 		justifyContent: "center",

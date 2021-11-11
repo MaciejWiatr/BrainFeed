@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 5,
 		width: "100%",
 		alignItems: "flex-end",
+		flexDirection: "column-reverse",
 		paddingHorizontal: 15,
 		paddingBottom: 90,
 	},

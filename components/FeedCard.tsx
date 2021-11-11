@@ -1,5 +1,6 @@
 import React, { FC } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Button } from "react-native";
+import useTheme from "../store/useTheme";
 
 interface IProps {
 	image: string;
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
 		marginVertical: 5,
 		borderRadius: 10,
 		width: "75%",
+		maxWidth: 350,
 		overflow: "hidden",
 		elevation: 1,
 	},
