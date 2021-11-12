@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 15,
 		overflow: "hidden",
 		height: 75,
-		maxWidth: 500,
 	},
 	formWrapper: {
 		borderRadius: 10,

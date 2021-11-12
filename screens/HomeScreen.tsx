@@ -1,9 +1,9 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { FlatList, StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import FeedCard from "../components/FeedCard";
 import FeedForm from "../components/FeedForm";
+import useTheme from "../store/useTheme";
 
 const fakeUrls = [
 	{
@@ -49,12 +49,16 @@ const fakeUrls = [
 ];
 
 export default function HomeScreen() {
+	const { isDark } = useTheme();
+
 	return (
 		<View style={styles.container}>
-			<StatusBar style="auto" />
 			<ScrollView
 				style={{ width: "100%" }}
-				contentContainerStyle={styles.scrollList}
+				contentContainerStyle={{
+					...styles.scrollList,
+					backgroundColor: isDark ? "#202020" : "#eeeeee",
+				}}
 			>
 				{fakeUrls.map(
 					({ image, title, description, id, uploadDate }) => (

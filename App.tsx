@@ -4,6 +4,7 @@ import {
 	DefaultTheme,
 	NavigationContainer,
 } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
 import ThemeSwitch from "./components/ThemeSwitch";
 import HomeScreen from "./screens/HomeScreen";
@@ -14,6 +15,7 @@ export default function App() {
 	const { isDark } = useTheme();
 	return (
 		<NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
+			<StatusBar style={isDark ? "light" : "dark"} />
 			<Drawer.Navigator
 				initialRouteName="Feed"
 				screenOptions={{

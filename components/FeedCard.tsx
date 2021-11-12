@@ -1,5 +1,14 @@
-import React, { FC } from "react";
-import { StyleSheet, Text, View, Image, Button } from "react-native";
+import React, { FC, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { PanGestureHandler } from "react-native-gesture-handler";
+import Animated, {
+	runOnJS,
+	useAnimatedGestureHandler,
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+	withTiming,
+} from "react-native-reanimated";
 import useTheme from "../store/useTheme";
 
 interface IProps {
@@ -10,20 +19,102 @@ interface IProps {
 }
 
 const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
+	const { isDark } = useTheme();
+	const maxHeight = useSharedValue(100);
+	const maxCollapseIndicatorHeight = useSharedValue(0);
+	const maxDescHeight = useSharedValue(100);
+	const startingPosition = 0;
+	const x = useSharedValue(startingPosition);
+	const pressed = useSharedValue(false);
+	const [collapsed, setCollapsed] = useState(false);
+
+	const eventHandler = useAnimatedGestureHandler({
+		onStart: (event, ctx) => {
+			pressed.value = true;
+		},
+		onActive: (event, ctx) => {
+			x.value = startingPosition + event.translationX;
+		},
+		onEnd: (event, ctx) => {
+			if (event.translationX < -100) {
+				maxHeight.value = withSpring(0, { overshootClamping: true });
+				maxCollapseIndicatorHeight.value = withSpring(50);
+				maxDescHeight.value = withSpring(0, {
+					overshootClamping: true,
+					damping: 10000000,
+				});
+				runOnJS(setCollapsed)(true);
+			} else {
+				maxHeight.value = withSpring(100);
+				maxCollapseIndicatorHeight.value = withSpring(0, {
+					overshootClamping: true,
+					damping: 10000000,
+				});
+				maxDescHeight.value = withSpring(100, {
+					overshootClamping: true,
+					damping: 10000000,
+				});
+				runOnJS(setCollapsed)(false);
+			}
+			x.value = withSpring(startingPosition);
+		},
+	});
+
+	const useSlidingAnimationStyles = useAnimatedStyle(() => {
+		return {
+			transform: [{ translateX: x.value }],
+		};
+	});
+
+	const useCollapseStyle = useAnimatedStyle(() => {
+		return {
+			height: maxHeight.value,
+		};
+	});
+
+	const useCollapseTextIndicatorStyle = useAnimatedStyle(() => {
+		return {
+			maxHeight: maxCollapseIndicatorHeight.value,
+		};
+	});
+
+	const useDescriptionAnimatedStyles = useAnimatedStyle(() => {
+		return {
+			maxHeight: maxDescHeight.value,
+		};
+	});
+
 	return (
-		<View style={styles.feedCard}>
-			<Image
-				style={{ width: "100%", height: 100 }}
-				source={{ uri: image }}
-			/>
-			<View style={styles.feedCardTextWrapper}>
-				<Text style={styles.feedCardTitle}>{title}</Text>
-				<Text style={styles.feedCardDesc}>{description}</Text>
-				<Text style={styles.feedCardDate}>
-					{uploadDate.toDateString()}
-				</Text>
-			</View>
-		</View>
+		<PanGestureHandler onGestureEvent={eventHandler}>
+			<Animated.View style={[styles.feedCard, useSlidingAnimationStyles]}>
+				<Animated.Image
+					style={[{ width: "100%", height: 100 }, useCollapseStyle]}
+					source={{ uri: image }}
+				/>
+				<View style={styles.feedCardTextWrapper}>
+					<Animated.Text
+						style={[
+							useCollapseTextIndicatorStyle,
+							{ color: "#27ae60" },
+						]}
+					>
+						Marked as read
+					</Animated.Text>
+					<Text style={styles.feedCardTitle}>{title}</Text>
+					<Animated.Text
+						style={[
+							styles.feedCardDesc,
+							useDescriptionAnimatedStyles,
+						]}
+					>
+						{description}
+					</Animated.Text>
+					<Text style={styles.feedCardDate}>
+						{uploadDate.toDateString()}
+					</Text>
+				</View>
+			</Animated.View>
+		</PanGestureHandler>
 	);
 };
 
