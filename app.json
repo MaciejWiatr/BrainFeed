@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "braindump",
-    "slug": "braindump",
+    "name": "brainfeed",
+    "slug": "brainfeed",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
