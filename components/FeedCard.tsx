@@ -7,7 +7,6 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
-	withTiming,
 } from "react-native-reanimated";
 import useTheme from "../store/useTheme";
 
@@ -27,6 +26,7 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 	const x = useSharedValue(startingPosition);
 	const pressed = useSharedValue(false);
 	const [collapsed, setCollapsed] = useState(false);
+	const descInitialHeight = useSharedValue(0);
 
 	const eventHandler = useAnimatedGestureHandler({
 		onStart: (event, ctx) => {
@@ -41,19 +41,17 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 				maxCollapseIndicatorHeight.value = withSpring(50);
 				maxDescHeight.value = withSpring(0, {
 					overshootClamping: true,
-					damping: 10000000,
+					damping: 1000,
+					stiffness: 200,
 				});
 				runOnJS(setCollapsed)(true);
 			} else {
 				maxHeight.value = withSpring(100);
 				maxCollapseIndicatorHeight.value = withSpring(0, {
 					overshootClamping: true,
-					damping: 10000000,
+					damping: 100,
 				});
-				maxDescHeight.value = withSpring(100, {
-					overshootClamping: true,
-					damping: 10000000,
-				});
+				maxDescHeight.value = withSpring(descInitialHeight.value);
 				runOnJS(setCollapsed)(false);
 			}
 			x.value = withSpring(startingPosition);
@@ -85,7 +83,10 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 	});
 
 	return (
-		<PanGestureHandler onGestureEvent={eventHandler}>
+		<PanGestureHandler
+			onGestureEvent={eventHandler}
+			activeOffsetX={[-15, 15]}
+		>
 			<Animated.View style={[styles.feedCard, useSlidingAnimationStyles]}>
 				<Animated.Image
 					style={[{ width: "100%", height: 100 }, useCollapseStyle]}
@@ -102,6 +103,12 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 					</Animated.Text>
 					<Text style={styles.feedCardTitle}>{title}</Text>
 					<Animated.Text
+						onLayout={(evt) => {
+							if (!descInitialHeight.value) {
+								descInitialHeight.value =
+									evt.nativeEvent.layout.height;
+							}
+						}}
 						style={[
 							styles.feedCardDesc,
 							useDescriptionAnimatedStyles,
@@ -110,7 +117,7 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 						{description}
 					</Animated.Text>
 					<Text style={styles.feedCardDate}>
-						{uploadDate.toDateString()}
+						{JSON.stringify(uploadDate)}
 					</Text>
 				</View>
 			</Animated.View>
@@ -125,8 +132,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		marginVertical: 5,
 		borderRadius: 10,
-		width: "75%",
-		maxWidth: 350,
+		width: 300,
 		overflow: "hidden",
 		elevation: 1,
 	},
@@ -142,5 +148,7 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 		color: "gray",
 	},
-	feedCardDesc: {},
+	feedCardDesc: {
+		overflow: "hidden",
+	},
 });

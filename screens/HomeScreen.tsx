@@ -1,15 +1,16 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import FeedCard from "../components/FeedCard";
 import FeedForm from "../components/FeedForm";
+import useFeedItems from "../store/useFeedItems";
 import useTheme from "../store/useTheme";
 
 const fakeUrls = [
 	{
 		id: 1,
 		image: "http://placeimg.com/640/480/tech",
-		title: "Direct Operations Facilitator",
+		title: "Direct Operations Facilitator 1",
 		description:
 			"Ergonomic executive chair upholstered in bonded black leather and",
 		uploadDate: new Date(),
@@ -17,7 +18,7 @@ const fakeUrls = [
 	{
 		id: 2,
 		image: "http://placeimg.com/640/480/tech",
-		title: "Direct Operations Facilitator",
+		title: "Direct Operations Facilitator 2",
 		description:
 			"Ergonomic executive chair upholstered in bonded black leather and",
 		uploadDate: new Date(),
@@ -25,7 +26,7 @@ const fakeUrls = [
 	{
 		id: 3,
 		image: "http://placeimg.com/640/480/tech",
-		title: "Direct Operations Facilitator",
+		title: "Direct Operations Facilitator 3",
 		description:
 			"Ergonomic executive chair upholstered in bonded black leather and",
 		uploadDate: new Date(),
@@ -33,7 +34,7 @@ const fakeUrls = [
 	{
 		id: 4,
 		image: "http://placeimg.com/640/480/tech",
-		title: "Direct Operations Facilitator",
+		title: "Direct Operations Facilitator 4",
 		description:
 			"Ergonomic executive chair upholstered in bonded black leather and",
 		uploadDate: new Date(),
@@ -41,7 +42,7 @@ const fakeUrls = [
 	{
 		id: 5,
 		image: "http://placeimg.com/640/480/tech",
-		title: "Direct Operations Facilitator",
+		title: "Direct Operations Facilitator 5",
 		description:
 			"Ergonomic executive chair upholstered in bonded black leather and",
 		uploadDate: new Date(),
@@ -50,28 +51,28 @@ const fakeUrls = [
 
 export default function HomeScreen() {
 	const { isDark } = useTheme();
+	const { items } = useFeedItems();
 
 	return (
 		<View style={styles.container}>
-			<ScrollView
-				style={{ width: "100%" }}
-				contentContainerStyle={{
-					...styles.scrollList,
-					backgroundColor: isDark ? "#202020" : "#eeeeee",
-				}}
-			>
-				{fakeUrls.map(
-					({ image, title, description, id, uploadDate }) => (
-						<FeedCard
-							key={id}
-							image={image}
-							title={title}
-							description={description}
-							uploadDate={uploadDate}
-						/>
-					)
+			<FlatList
+				style={styles.feedList}
+				contentContainerStyle={styles.feedListContent}
+				data={items}
+				keyExtractor={(item) => item.id.toString()}
+				renderItem={({ item }) => (
+					<FeedCard
+						key={item.id}
+						image={
+							"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
+						}
+						title={item.title}
+						description={item.description}
+						uploadDate={item.uploadDate}
+					/>
 				)}
-			</ScrollView>
+				inverted
+			></FlatList>
 			<FeedForm />
 		</View>
 	);
@@ -79,13 +80,26 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
 	container: {
+		position: "relative",
 		flex: 1,
 		backgroundColor: "#eeeeee",
 		alignItems: "center",
 		justifyContent: "center",
 	},
+	feedList: {
+		width: "100%",
+	},
+	feedListContent: {
+		width: "100%",
+		display: "flex",
+		alignItems: "flex-end",
+		paddingHorizontal: 15,
+		paddingVertical: 5,
+		paddingTop: 100,
+	},
 	scrollList: {
 		paddingVertical: 5,
+		height: "100%",
 		width: "100%",
 		alignItems: "flex-end",
 		flexDirection: "column-reverse",
