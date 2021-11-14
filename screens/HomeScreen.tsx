@@ -63,9 +63,7 @@ export default function HomeScreen() {
 				renderItem={({ item }) => (
 					<FeedCard
 						key={item.id}
-						image={
-							"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
-						}
+						image={item.image}
 						title={item.title}
 						description={item.description}
 						uploadDate={item.uploadDate}
@@ -95,7 +93,7 @@ const styles = StyleSheet.create({
 		alignItems: "flex-end",
 		paddingHorizontal: 15,
 		paddingVertical: 5,
-		paddingTop: 100,
+		paddingTop: 90,
 	},
 	scrollList: {
 		paddingVertical: 5,

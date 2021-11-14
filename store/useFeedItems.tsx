@@ -59,18 +59,18 @@ interface IFeedItemsState {
 }
 
 const useFeedItems = create<IFeedItemsState>(
-	persist(
-		(set, get) => ({
-			items: mockFeedItems,
-			addItem: (item: IFeedItem) => {
-				set((s) => ({ items: [item, ...s.items] }));
-			},
-		}),
-		{
-			name: "@brainfeed/feedItems",
-			getStorage: () => AsyncStorage,
-		}
-	)
+	// persist(
+	(set, get) => ({
+		items: mockFeedItems,
+		addItem: (item: IFeedItem) => {
+			set((s) => ({ items: [item, ...s.items] }));
+		},
+	})
+	// 	{
+	// 		name: "@brainfeed/feedItems",
+	// 		getStorage: () => AsyncStorage,
+	// 	}
+	// )
 );
 
 export default useFeedItems;

@@ -30,10 +30,10 @@ const FeedForm = () => {
 				initialValues={{ url: "" }}
 				onSubmit={(values) =>
 					addItem({
-						id: Math.floor(Math.random() * 20),
+						id: Math.floor(Math.random() * 20000),
 						description: "bonjour meine friend",
 						title: values.url,
-						image: "https://pbs.twimg.com/profile_images/1206884382012784640/iiMWhp9y_400x400.jpg",
+						image: "https://placeimg.com/640/480/tech",
 						uploadDate: new Date(),
 					})
 				}
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
 	},
 	formButton: {
 		width: "20%",
-		backgroundColor: "#2C3A47",
+		backgroundColor: "black",
 		borderRadius: 10,
 		height: "100%",
 		display: "flex",
