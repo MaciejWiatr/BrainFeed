@@ -1,6 +1,6 @@
+import axios from "axios";
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { FlatList, StyleSheet, View, Text } from "react-native";
 import FeedCard from "../components/FeedCard";
 import FeedForm from "../components/FeedForm";
 import useFeedItems from "../store/useFeedItems";
@@ -52,7 +52,6 @@ const fakeUrls = [
 export default function HomeScreen() {
 	const { isDark } = useTheme();
 	const { items } = useFeedItems();
-
 	return (
 		<View style={styles.container}>
 			<FlatList

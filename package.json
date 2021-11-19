@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "start:devclient": "expo start --dev-client",
-    "build:devclient": "eas build --profile development --platform=android"
+    "build:devclient": "eas build --profile development --platform=android",
+    "build:apk": "eas build --profile apkPreview --platform=android"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.15.0",
@@ -17,6 +18,7 @@
     "@react-navigation/drawer": "^6.1.8",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
+    "axios": "^0.24.0",
     "expo": "~43.0.2",
     "expo-blur": "~10.0.3",
     "expo-clipboard": "~2.0.3",
