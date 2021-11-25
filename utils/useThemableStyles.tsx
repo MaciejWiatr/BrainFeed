@@ -17,10 +17,11 @@ const useThemableStyles = (isDark: boolean) => {
 		[isDark]
 	);
 
+	/** Function that toggles between values based on isDark value */
 	const t = useCallback(
-		<T,>(firstVal: T, secondVal: T): T => {
-			if (!isDark) return firstVal;
-			return secondVal;
+		<T,>(lightVal: T, darkVal: T): T => {
+			if (!isDark) return lightVal;
+			return darkVal;
 		},
 		[isDark]
 	);
