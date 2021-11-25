@@ -1,9 +1,4 @@
-import {
-	createDrawerNavigator,
-	DrawerContentScrollView,
-	DrawerItem,
-	DrawerItemList,
-} from "@react-navigation/drawer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import {
 	DarkTheme,
 	DefaultTheme,
@@ -11,6 +6,7 @@ import {
 } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
+import DrawerButton from "./components/DrawerButton";
 import NavigationDrawer from "./components/NavigationDrawer";
 import ThemeSwitch from "./components/ThemeSwitch";
 import HomeScreen from "./screens/HomeScreen";
@@ -27,6 +23,7 @@ export default function App() {
 				screenOptions={{
 					headerTitleAlign: "center",
 					headerRight: () => <ThemeSwitch />,
+					headerLeft: () => <DrawerButton />,
 				}}
 				drawerContent={(props) => <NavigationDrawer {...props} />}
 			>

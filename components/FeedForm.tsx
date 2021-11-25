@@ -5,53 +5,52 @@ import {
 	StyleSheet,
 	Text,
 	TextInput,
+	TouchableNativeFeedback,
 	TouchableOpacity,
 	View,
 } from "react-native";
 import useFeedItems from "../store/useFeedItems";
+import useTheme from "../store/useTheme";
+import useThemableStyles from "../utils/useThemableStyles";
 import * as Clipboard from "expo-clipboard";
 
 const FeedForm = () => {
 	const { addItem } = useFeedItems();
+	const { isDark } = useTheme();
+	const { s, t } = useThemableStyles(isDark);
 	const [initialUrlValue, setInitialUrlValue] = useState("");
 
-	// TODO: Waiting for expo to fix clipboard issue
-	// useEffect(() => {
-	// 	const checkIfClipboardContainsUrl = async () => {
-	// 		const clipboardText = await Clipboard.getStringAsync();
-	// 		console.log(clipboardText);
-	// 	};
-	// 	checkIfClipboardContainsUrl();
-	// }, []);
+	useEffect(() => {
+		const checkClipboardContainsUrl = async () => {
+			const clip = await Clipboard.getStringAsync();
+			if (!clip.includes("http")) return;
+
+			setInitialUrlValue(clip);
+		};
+		checkClipboardContainsUrl();
+	}, []);
 
 	return (
 		<View style={styles.formContainer}>
 			<Formik
-				initialValues={{ url: "" }}
-				onSubmit={(values) =>
+				enableReinitialize
+				initialValues={{ url: initialUrlValue }}
+				onSubmit={(values, { resetForm }) => {
 					addItem({
 						id: Math.floor(Math.random() * 20000),
 						description: "bonjour meine friend",
 						title: values.url,
 						image: "https://placeimg.com/640/480/tech",
 						uploadDate: new Date(),
-					})
-				}
+					});
+					setInitialUrlValue("");
+					resetForm();
+				}}
 			>
 				{({ handleChange, handleBlur, handleSubmit, values }) => (
-					<View
-						style={{
-							position: "relative",
-							overflow: "hidden",
-							borderTopLeftRadius: 10,
-							borderTopRightRadius: 10,
-							borderColor: "#dddddd",
-							borderWidth: 0.8,
-							borderBottomWidth: 0,
-						}}
-					>
+					<View style={s(styles.blurWrapper, darkStyles.blurWrapper)}>
 						<BlurView
-							blurType="xlight"
+							blurType={t("xlight", "dark")}
 							blurAmount={80}
 							style={styles.formBlur}
 							reducedTransparencyFallbackColor="white"
@@ -62,13 +61,27 @@ const FeedForm = () => {
 								onChangeText={handleChange("url")}
 								onBlur={handleBlur("url")}
 								value={values.url}
-								style={styles.formInput}
+								placeholderTextColor={t("gray", "#909090")}
+								style={s(
+									styles.formInput,
+									darkStyles.formInput
+								)}
 							/>
 							<TouchableOpacity
-								style={styles.formButton}
+								style={s(
+									styles.formButton,
+									darkStyles.formButton
+								)}
 								onPress={() => handleSubmit()}
 							>
-								<Text style={styles.formButtonText}>Send</Text>
+								<Text
+									style={s(
+										styles.formButtonText,
+										darkStyles.formButtonText
+									)}
+								>
+									Send
+								</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -80,14 +93,30 @@ const FeedForm = () => {
 
 export default FeedForm;
 
+const darkStyles = StyleSheet.create({
+	formButton: {
+		backgroundColor: "white",
+	},
+	formButtonText: {
+		color: "black",
+	},
+	formInput: {
+		borderColor: "#909090",
+		backgroundColor: "rgba(0,0,0,0)",
+	},
+	blurWrapper: {
+		backgroundColor: "rgba(255,255,255,0.2)",
+		borderWidth: 0,
+	},
+});
+
 const styles = StyleSheet.create({
 	formContainer: {
 		width: "100%",
 		position: "absolute",
 		overflow: "hidden",
-		height: 80,
+		minHeight: 80,
 		bottom: 0,
-		// paddingHorizontal: 15,
 	},
 	formBlur: {
 		overflow: "hidden",
@@ -96,6 +125,15 @@ const styles = StyleSheet.create({
 		left: 0,
 		bottom: 0,
 		right: 0,
+	},
+	blurWrapper: {
+		position: "relative",
+		overflow: "hidden",
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
+		borderColor: "#dddddd",
+		borderWidth: 0.8,
+		borderBottomWidth: 0,
 	},
 	formWrapper: {
 		padding: 15,

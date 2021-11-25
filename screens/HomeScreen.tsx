@@ -5,6 +5,7 @@ import FeedCard from "../components/FeedCard";
 import FeedForm from "../components/FeedForm";
 import useFeedItems from "../store/useFeedItems";
 import useTheme from "../store/useTheme";
+import useThemableStyles from "../utils/useThemableStyles";
 
 const fakeUrls = [
 	{
@@ -52,10 +53,11 @@ const fakeUrls = [
 export default function HomeScreen() {
 	const { isDark } = useTheme();
 	const { items } = useFeedItems();
+	const { s } = useThemableStyles(isDark);
 	return (
 		<View style={styles.container}>
 			<FlatList
-				style={styles.feedList}
+				style={s(styles.feedList, darkStyles.feedList)}
 				contentContainerStyle={styles.feedListContent}
 				data={items}
 				keyExtractor={(item) => item.id.toString()}
@@ -74,6 +76,12 @@ export default function HomeScreen() {
 		</View>
 	);
 }
+
+const darkStyles = StyleSheet.create({
+	feedList: {
+		backgroundColor: "black",
+	},
+});
 
 const styles = StyleSheet.create({
 	container: {

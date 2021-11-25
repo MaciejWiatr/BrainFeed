@@ -9,6 +9,7 @@ import Animated, {
 	withSpring,
 } from "react-native-reanimated";
 import useTheme from "../store/useTheme";
+import useThemableStyles from "../utils/useThemableStyles";
 
 interface IProps {
 	image: string;
@@ -19,6 +20,7 @@ interface IProps {
 
 const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 	const { isDark } = useTheme();
+	const { s } = useThemableStyles(isDark);
 	const maxHeight = useSharedValue(100);
 	const maxCollapseIndicatorHeight = useSharedValue(0);
 	const maxDescHeight = useSharedValue(100);
@@ -87,7 +89,12 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 			onGestureEvent={eventHandler}
 			activeOffsetX={[-15, 15]}
 		>
-			<Animated.View style={[styles.feedCard, useSlidingAnimationStyles]}>
+			<Animated.View
+				style={[
+					s(styles.feedCard, darkStyles.feedCard),
+					useSlidingAnimationStyles,
+				]}
+			>
 				<Animated.Image
 					style={[{ width: "100%", height: 100 }, useCollapseStyle]}
 					source={{ uri: image }}
@@ -101,7 +108,14 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 					>
 						Marked as read
 					</Animated.Text>
-					<Text style={styles.feedCardTitle}>{title}</Text>
+					<Text
+						style={s(
+							styles.feedCardTitle,
+							darkStyles.feedCardTitle
+						)}
+					>
+						{title}
+					</Text>
 					<Animated.Text
 						onLayout={(evt) => {
 							if (!descInitialHeight.value) {
@@ -110,7 +124,7 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 							}
 						}}
 						style={[
-							styles.feedCardDesc,
+							s(styles.feedCardDesc, darkStyles.feedCardDesc),
 							useDescriptionAnimatedStyles,
 						]}
 					>
@@ -127,6 +141,18 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 
 export default FeedCard;
 
+const darkStyles = StyleSheet.create({
+	feedCard: {
+		backgroundColor: "#202020",
+	},
+	feedCardTitle: {
+		color: "#eeeeee",
+	},
+	feedCardDesc: {
+		color: "gray",
+	},
+});
+
 const styles = StyleSheet.create({
 	feedCard: {
 		backgroundColor: "white",
@@ -140,6 +166,7 @@ const styles = StyleSheet.create({
 		padding: 15,
 	},
 	feedCardTitle: {
+		color: "black",
 		fontSize: 15,
 		fontWeight: "bold",
 	},
@@ -149,6 +176,7 @@ const styles = StyleSheet.create({
 		color: "gray",
 	},
 	feedCardDesc: {
+		color: "gray",
 		overflow: "hidden",
 	},
 });

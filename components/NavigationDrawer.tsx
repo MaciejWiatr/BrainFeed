@@ -5,8 +5,13 @@ import {
 } from "@react-navigation/drawer";
 import React from "react";
 import { Button, StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import useTheme from "../store/useTheme";
+import useThemableStyles from "../utils/useThemableStyles";
 
 const NavigationDrawer = (props: DrawerContentComponentProps) => {
+	const { isDark } = useTheme();
+	const { s } = useThemableStyles(isDark);
+
 	return (
 		<DrawerContentScrollView
 			{...props}
@@ -18,8 +23,15 @@ const NavigationDrawer = (props: DrawerContentComponentProps) => {
 		>
 			<DrawerItemList {...props} />
 			<TouchableOpacity>
-				<View style={styles.newFeedButton}>
-					<Text style={styles.newFeedButtonText}>Add new feed</Text>
+				<View style={s(styles.newFeedButton, darkStyles.newFeedButton)}>
+					<Text
+						style={s(
+							styles.newFeedButtonText,
+							darkStyles.newFeedButtonText
+						)}
+					>
+						Add new feed
+					</Text>
 				</View>
 			</TouchableOpacity>
 		</DrawerContentScrollView>
@@ -27,6 +39,15 @@ const NavigationDrawer = (props: DrawerContentComponentProps) => {
 };
 
 export default NavigationDrawer;
+
+const darkStyles = StyleSheet.create({
+	newFeedButton: {
+		backgroundColor: "white",
+	},
+	newFeedButtonText: {
+		color: "black",
+	},
+});
 
 const styles = StyleSheet.create({
 	newFeedButton: {
@@ -37,7 +58,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		marginHorizontal: 10,
-		marginBottom: 10,
+		marginBottom: 15,
 	},
 	newFeedButtonText: {
 		color: "white",
