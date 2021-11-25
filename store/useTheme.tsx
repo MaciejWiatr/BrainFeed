@@ -1,4 +1,5 @@
 import create from "zustand";
+import { Appearance } from "react-native";
 
 interface IState {
 	isDark: boolean;
@@ -6,7 +7,7 @@ interface IState {
 }
 
 const useTheme = create<IState>((set, get) => ({
-	isDark: false,
+	isDark: Appearance.getColorScheme() == "dark",
 	toggleTheme: () => {
 		set((s) => ({ isDark: !s.isDark }));
 	},
