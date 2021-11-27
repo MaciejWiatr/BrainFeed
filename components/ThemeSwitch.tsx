@@ -5,16 +5,10 @@ import useTheme from "../store/useTheme";
 
 const ThemeSwitch = () => {
 	const { toggleTheme, isDark } = useTheme();
-	const [isEnabled, setIsEnabled] = useState(false);
-	const toggleSwitch = () => {
-		setIsEnabled((previousState) => !previousState);
-		toggleTheme();
-	};
-
 	return (
 		<View style={styles.themeSwitch}>
 			<Text style={styles.themeSwitchText}>{isDark ? "🌙" : "🌻"}</Text>
-			<Switch onValueChange={toggleSwitch} value={isEnabled} />
+			<Switch onValueChange={toggleTheme} value={isDark} />
 		</View>
 	);
 };
