@@ -13,8 +13,10 @@ import useFeedItems from "../store/useFeedItems";
 import useTheme from "../store/useTheme";
 import useThemableStyles from "../utils/useThemableStyles";
 import * as Clipboard from "expo-clipboard";
+import { useNotifications } from "../features/notifications";
 
 const FeedForm = () => {
+	const notify = useNotifications();
 	const { addItem } = useFeedItems();
 	const { isDark } = useTheme();
 	const { s, t } = useThemableStyles(isDark);
@@ -26,6 +28,10 @@ const FeedForm = () => {
 			if (!clip.includes("http")) return;
 
 			setInitialUrlValue(clip);
+			notify({
+				message: "URL was copied from clipboard",
+				type: "success",
+			});
 		};
 		checkClipboardContainsUrl();
 	}, []);

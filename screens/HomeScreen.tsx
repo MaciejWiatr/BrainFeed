@@ -3,6 +3,7 @@ import React from "react";
 import { FlatList, StyleSheet, View, Text } from "react-native";
 import FeedCard from "../components/FeedCard";
 import FeedForm from "../components/FeedForm";
+import { NotificationWrapper } from "../features/notifications";
 import useFeedItems from "../store/useFeedItems";
 import useTheme from "../store/useTheme";
 import useThemableStyles from "../utils/useThemableStyles";
@@ -56,23 +57,25 @@ export default function HomeScreen() {
 	const { s } = useThemableStyles(isDark);
 	return (
 		<View style={styles.container}>
-			<FlatList
-				style={s(styles.feedList, darkStyles.feedList)}
-				contentContainerStyle={styles.feedListContent}
-				data={items}
-				keyExtractor={(item) => item.id.toString()}
-				renderItem={({ item }) => (
-					<FeedCard
-						key={item.id}
-						image={item.image}
-						title={item.title}
-						description={item.description}
-						uploadDate={item.uploadDate}
-					/>
-				)}
-				inverted
-			></FlatList>
-			<FeedForm />
+			<NotificationWrapper>
+				<FlatList
+					style={s(styles.feedList, darkStyles.feedList)}
+					contentContainerStyle={styles.feedListContent}
+					data={items}
+					keyExtractor={(item) => item.id.toString()}
+					renderItem={({ item }) => (
+						<FeedCard
+							key={item.id}
+							image={item.image}
+							title={item.title}
+							description={item.description}
+							uploadDate={item.uploadDate}
+						/>
+					)}
+					inverted
+				></FlatList>
+				<FeedForm />
+			</NotificationWrapper>
 		</View>
 	);
 }
