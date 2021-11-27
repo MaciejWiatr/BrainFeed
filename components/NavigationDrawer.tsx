@@ -2,14 +2,18 @@ import {
 	DrawerContentComponentProps,
 	DrawerContentScrollView,
 	DrawerItemList,
+	DrawerItem,
 } from "@react-navigation/drawer";
 import React from "react";
-import { Button, StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import useTheme from "../store/useTheme";
+import { useTheme as useRNTheme } from "@react-navigation/native";
 import useThemableStyles from "../utils/useThemableStyles";
+import { Ionicons } from "@expo/vector-icons";
 
 const NavigationDrawer = (props: DrawerContentComponentProps) => {
 	const { isDark } = useTheme();
+	const { colors } = useRNTheme();
 	const { s } = useThemableStyles(isDark);
 
 	return (
@@ -18,10 +22,20 @@ const NavigationDrawer = (props: DrawerContentComponentProps) => {
 			contentContainerStyle={{
 				height: "100%",
 				display: "flex",
-				justifyContent: "space-between",
 			}}
 		>
 			<DrawerItemList {...props} />
+			<View style={{ flex: 1 }}></View>
+			<DrawerItem
+				activeBackgroundColor="red"
+				labelStyle={{ color: colors.text }}
+				icon={() => (
+					<Ionicons name="settings-outline" size={24} color="gray" />
+				)}
+				label="Settings"
+				to="Settings"
+				onPress={() => props.navigation.navigate("Settings")}
+			/>
 			<TouchableOpacity>
 				<View style={s(styles.newFeedButton, darkStyles.newFeedButton)}>
 					<Text
