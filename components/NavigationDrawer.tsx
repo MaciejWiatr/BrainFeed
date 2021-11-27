@@ -27,7 +27,6 @@ const NavigationDrawer = (props: DrawerContentComponentProps) => {
 			<DrawerItemList {...props} />
 			<View style={{ flex: 1 }}></View>
 			<DrawerItem
-				activeBackgroundColor="red"
 				labelStyle={{ color: colors.text }}
 				icon={() => (
 					<Ionicons name="settings-outline" size={24} color="gray" />
