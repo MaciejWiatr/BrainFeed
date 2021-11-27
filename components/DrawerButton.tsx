@@ -16,7 +16,6 @@ const DrawerButton = () => {
 	const navigation = useNavigation();
 
 	const handleToggle = () => {
-		console.log("test");
 		navigation.dispatch(DrawerActions.toggleDrawer());
 	};
 
