@@ -4,6 +4,9 @@
   },
   "build": {
     "development": {
+      "env":{
+        "EXPO_PROD": "false"
+      },
       "developmentClient": true,
       "distribution": "internal"
     },
@@ -11,7 +14,10 @@
       "distribution": "internal"
     },
     "production": {},
-    "apkPreview": {
+    "apk": {
+      "env": {
+        "EXPO_PROD": "true"
+      },
       "android": {
         "buildType": "apk"
       }
