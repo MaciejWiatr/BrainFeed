@@ -101,6 +101,7 @@ const darkStyles = StyleSheet.create({
 		color: "black",
 	},
 	formInput: {
+		color: "white",
 		borderColor: "#909090",
 		backgroundColor: "rgba(0,0,0,0)",
 	},
