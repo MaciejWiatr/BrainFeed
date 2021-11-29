@@ -1,12 +1,27 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import Animated, {
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+} from "react-native-reanimated";
 
 const Notification = ({ children }: { children: ReactNode }) => {
+	const y = useSharedValue(-100);
+
+	useEffect(() => {
+		y.value = withSpring(0);
+	});
+
+	const bubbleAnimatedStyle = useAnimatedStyle(() => ({
+		transform: [{ translateY: y.value }],
+	}));
+
 	return (
 		<View style={styles.container}>
-			<View style={styles.bubble}>
+			<Animated.View style={[styles.bubble, bubbleAnimatedStyle]}>
 				<Text style={styles.bubbleText}>{children}</Text>
-			</View>
+			</Animated.View>
 		</View>
 	);
 };
