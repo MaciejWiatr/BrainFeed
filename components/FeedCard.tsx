@@ -143,7 +143,7 @@ export default FeedCard;
 
 const darkStyles = StyleSheet.create({
 	feedCard: {
-		backgroundColor: "#202020",
+		backgroundColor: "#303030",
 	},
 	feedCardTitle: {
 		color: "#eeeeee",

@@ -49,18 +49,19 @@ const FeedForm = () => {
 						image: "https://placeimg.com/640/480/tech",
 						uploadDate: new Date(),
 					});
+					notify({ message: "Link was added", type: "success" });
 					setInitialUrlValue("");
 					resetForm();
 				}}
 			>
 				{({ handleChange, handleBlur, handleSubmit, values }) => (
 					<View style={s(styles.blurWrapper, darkStyles.blurWrapper)}>
-						<BlurView
+						{/* <BlurView
 							blurType={t("xlight", "dark")}
 							blurAmount={80}
 							style={styles.formBlur}
 							reducedTransparencyFallbackColor="white"
-						/>
+						/> */}
 						<View style={styles.formWrapper}>
 							<TextInput
 								placeholder="Some fancy url ✨"
@@ -112,7 +113,7 @@ const darkStyles = StyleSheet.create({
 		backgroundColor: "rgba(0,0,0,0)",
 	},
 	blurWrapper: {
-		backgroundColor: "rgba(255,255,255,0.2)",
+		backgroundColor: "#303030",
 		borderWidth: 0,
 	},
 });
@@ -138,6 +139,7 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
+		backgroundColor: "#eeeeee",
 		borderColor: "#dddddd",
 		borderWidth: 0.8,
 		borderBottomWidth: 0,
@@ -160,6 +162,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		borderWidth: 0.5,
 		borderColor: "#cccccc",
+		color: "black",
 	},
 	formButton: {
 		width: "20%",
