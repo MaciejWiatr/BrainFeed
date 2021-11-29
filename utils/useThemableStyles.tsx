@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { ImageStyle, TextStyle, ViewStyle } from "react-native";
+import * as R from "ramda";
 
 type Styles<T> = ViewStyle | TextStyle | ImageStyle;
 
@@ -12,7 +13,7 @@ const useThemableStyles = (isDark: boolean) => {
 		): T | Styles<T> => {
 			if (!isDark || !darkThemeStyles) return lightThemeStyles;
 			if (override) return darkThemeStyles;
-			return { ...lightThemeStyles, ...darkThemeStyles };
+			return R.mergeRight(lightThemeStyles, darkThemeStyles);
 		},
 		[isDark]
 	);

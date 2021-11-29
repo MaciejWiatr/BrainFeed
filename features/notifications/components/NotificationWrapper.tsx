@@ -2,6 +2,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { INotification } from "../types/Notification";
 import { NotificationContext } from "../contexts/NotificationContext";
 import Notification from "./Notification";
+import * as R from "ramda";
 
 interface IProps {
 	children: ReactNode;
@@ -22,9 +23,7 @@ const NotificationWrapper: FC<IProps> = ({ children }) => {
 		let timeout: any;
 		if (notifications.length > 0) {
 			timeout = setTimeout(() => {
-				const newNotifications = [...notifications];
-				newNotifications.splice(0, 1);
-				setNotifications(newNotifications);
+				setNotifications(R.without([notifications[0]], notifications));
 			}, 1500);
 		}
 		return () => {
