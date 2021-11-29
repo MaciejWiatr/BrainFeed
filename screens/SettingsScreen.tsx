@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import { Picker } from "@react-native-community/picker";
 
 const SettingsScreen = () => {
 	const [selectedLanguage, setSelectedLanguage] = useState();
@@ -15,30 +15,26 @@ const SettingsScreen = () => {
 					</Text>
 				</View>
 				<View style={styles.settingActionContainer}>
-					<View style={styles.settingSwitch}>
-						<Picker
-							selectedValue={selectedLanguage}
-							onValueChange={(itemValue, itemIndex) =>
-								setSelectedLanguage(itemValue)
-							}
-						>
-							<Picker.Item
-								style={styles.settingSwitchText}
-								label="Disabled"
-								value={false}
-							/>
-							<Picker.Item
-								style={styles.settingSwitchText}
-								label="Enabled"
-								value={true}
-							/>
-						</Picker>
-					</View>
+					<Picker
+						selectedValue={selectedLanguage}
+						onValueChange={(itemValue, itemIndex) =>
+							setSelectedLanguage(itemValue)
+						}
+					>
+						<Picker.Item label="Java" value="java" />
+						<Picker.Item label="JavaScript" value="js" />
+					</Picker>
 				</View>
 			</View>
 		</ScrollView>
 	);
 };
+
+const darkStyles = StyleSheet.create({
+	settingsCard: {
+		backgroundColor: "#303030",
+	},
+});
 
 const styles = StyleSheet.create({
 	settingsContainer: {
@@ -72,11 +68,12 @@ const styles = StyleSheet.create({
 	},
 	settingSwitch: {
 		backgroundColor: "#eeeeee",
-		borderRadius: 8,
+		borderRadius: 10,
 		overflow: "hidden",
 	},
 	settingSwitchText: {
 		fontSize: 14,
+		color: "black",
 	},
 });
 
