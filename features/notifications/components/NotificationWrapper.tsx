@@ -35,7 +35,9 @@ const NotificationWrapper: FC<IProps> = ({ children }) => {
 		<React.Fragment>
 			<NotificationContext.Provider value={{ notify }}>
 				{notifications.length > 0 && (
-					<Notification>{notifications[0].message}</Notification>
+					<Notification key={Math.random().toString()}>
+						{notifications[0].message}
+					</Notification>
 				)}
 				{children}
 			</NotificationContext.Provider>
