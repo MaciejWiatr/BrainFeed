@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import useFeedItems from "../store/useFeedItems";
 import useTheme from "../store/useTheme";
-import useThemableStyles from "../utils/useThemableStyles";
+import { useThemableStyles } from "../features/theme";
 import * as Clipboard from "expo-clipboard";
 import { useNotifications } from "../features/notifications";
 

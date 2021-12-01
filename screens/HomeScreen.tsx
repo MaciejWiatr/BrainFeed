@@ -5,7 +5,7 @@ import FeedForm from "../components/FeedForm";
 import { NotificationWrapper } from "../features/notifications";
 import useFeedItems from "../store/useFeedItems";
 import useTheme from "../store/useTheme";
-import useThemableStyles from "../utils/useThemableStyles";
+import { useThemableStyles } from "../features/theme/";
 
 export default function HomeScreen() {
 	const { isDark } = useTheme();

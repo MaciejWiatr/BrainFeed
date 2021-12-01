@@ -11,14 +11,12 @@
     "test": "jest",
     "start:devclient": "expo start --dev-client",
     "build:devclient": "eas build --profile development --platform=android",
-    "build:apk": "eas build --profile apkPreview --platform=android"
+    "build:apk": "eas build --profile apk --platform=android"
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/blur": "^3.6.0",
-    "@react-native-community/picker": "^1.8.1",
-    "@react-native-picker/picker": "2.1.0",
     "@react-navigation/drawer": "^6.1.8",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
@@ -30,6 +28,7 @@
     "expo-dev-client": "~0.6.3",
     "expo-status-bar": "~1.1.0",
     "formik": "^2.2.9",
+    "native-base": "^3.2.2",
     "ramda": "^0.27.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -38,6 +37,7 @@
     "react-native-reanimated": "^2.3.0-beta.4",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.8.0",
+    "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
     "react-use": "^17.3.1",
     "ts-jest": "^27.0.7",

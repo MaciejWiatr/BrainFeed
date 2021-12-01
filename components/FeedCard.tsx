@@ -9,7 +9,7 @@ import Animated, {
 	withSpring,
 } from "react-native-reanimated";
 import useTheme from "../store/useTheme";
-import useThemableStyles from "../utils/useThemableStyles";
+import { useThemableStyles } from "../features/theme/";
 
 interface IProps {
 	image: string;

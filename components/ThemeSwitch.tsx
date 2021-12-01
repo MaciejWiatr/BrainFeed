@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Switch } from "react-native-gesture-handler";
+import { Switch, useColorMode } from "native-base";
 import useTheme from "../store/useTheme";
 
 const ThemeSwitch = () => {
 	const { toggleTheme, isDark } = useTheme();
+	const { toggleColorMode, colorMode } = useColorMode();
 	return (
 		<View style={styles.themeSwitch}>
 			<Text style={styles.themeSwitchText}>{isDark ? "🌙" : "🌻"}</Text>
-			<Switch onValueChange={toggleTheme} value={isDark} />
+			<Switch
+				onToggle={() => {
+					toggleTheme();
+					toggleColorMode();
+					console.log(colorMode);
+				}}
+				isChecked={isDark}
+			/>
 		</View>
 	);
 };

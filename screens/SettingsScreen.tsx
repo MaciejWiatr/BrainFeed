@@ -1,31 +1,63 @@
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Picker } from "@react-native-community/picker";
+import { StyleSheet } from "react-native";
+import {
+	Box,
+	CheckIcon,
+	HStack,
+	Select,
+	Text,
+	VStack,
+	ScrollView,
+} from "native-base";
+import { Feather } from "@expo/vector-icons";
+import useTheme from "../store/useTheme";
 
 const SettingsScreen = () => {
-	const [selectedLanguage, setSelectedLanguage] = useState();
+	let [service, setService] = useState("true");
+	const { isDark } = useTheme();
+
 	return (
-		<ScrollView contentContainerStyle={styles.settingsContainer}>
-			<View style={styles.settingCard}>
-				<View style={styles.settingTextContainer}>
-					<Text style={styles.settingTitle}>Speed mode</Text>
-					<Text style={styles.settingDesc}>
+		<ScrollView
+			contentContainerStyle={styles.settingsContainer}
+			bg="gray.200"
+			_dark={{ bg: "gray.800" }}
+		>
+			<HStack
+				p="5"
+				bgColor="white"
+				borderRadius="12"
+				mt="2"
+				mb="2"
+				_dark={{ bg: "gray.700" }}
+			>
+				<VStack w="60%">
+					<Text fontSize="md">Speed mode</Text>
+					<Text fontSize="xs" color="gray.400">
 						Disable blur and some of the animations to speed-up
 						application
 					</Text>
-				</View>
-				<View style={styles.settingActionContainer}>
-					<Picker
-						selectedValue={selectedLanguage}
-						onValueChange={(itemValue, itemIndex) =>
-							setSelectedLanguage(itemValue)
-						}
+				</VStack>
+				<VStack w="40%" justifyContent="center">
+					<Select
+						selectedValue={service}
+						accessibilityLabel="Choose Service"
+						_selectedItem={{
+							endIcon: (
+								<Feather
+									name="check-circle"
+									size={18}
+									color={isDark ? "white" : "black"}
+								/>
+							),
+						}}
+						mt={1}
+						onValueChange={(itemValue) => setService(itemValue)}
 					>
-						<Picker.Item label="Java" value="java" />
-						<Picker.Item label="JavaScript" value="js" />
-					</Picker>
-				</View>
-			</View>
+						<Select.Item label="Enabled" value="true" />
+						<Select.Item label="Disabled" value="false" />
+					</Select>
+				</VStack>
+			</HStack>
 		</ScrollView>
 	);
 };

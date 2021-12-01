@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, {
+	FadeOut,
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
@@ -18,11 +19,11 @@ const Notification = ({ children }: { children: ReactNode }) => {
 	}));
 
 	return (
-		<View style={styles.container}>
+		<Animated.View exiting={FadeOut} style={styles.container}>
 			<Animated.View style={[styles.bubble, bubbleAnimatedStyle]}>
 				<Text style={styles.bubbleText}>{children}</Text>
 			</Animated.View>
-		</View>
+		</Animated.View>
 	);
 };
 
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		flexDirection: "row",
 		paddingTop: 10,
+		elevation: 10,
 	},
 	bubble: {
 		backgroundColor: "#2ecc71",
