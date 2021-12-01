@@ -8,7 +8,12 @@ import Animated, {
 	useSharedValue,
 	withSpring,
 } from "react-native-reanimated";
-import { useThemableStyles, useTheme } from "@features/theme";
+import {
+	useThemableStyles,
+	useTheme,
+	lightTheme,
+	darkTheme,
+} from "@features/theme";
 
 interface IProps {
 	image: string;
@@ -142,10 +147,10 @@ export default FeedCard;
 
 const darkStyles = StyleSheet.create({
 	feedCard: {
-		backgroundColor: "#303030",
+		backgroundColor: darkTheme.cardBgColor,
 	},
 	feedCardTitle: {
-		color: "#eeeeee",
+		color: darkTheme.textColorPrimary,
 	},
 	feedCardDesc: {
 		color: "gray",
@@ -154,7 +159,7 @@ const darkStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
 	feedCard: {
-		backgroundColor: "white",
+		backgroundColor: lightTheme.cardBgColor,
 		marginVertical: 5,
 		borderRadius: 10,
 		width: 300,
@@ -165,17 +170,17 @@ const styles = StyleSheet.create({
 		padding: 15,
 	},
 	feedCardTitle: {
-		color: "black",
+		color: lightTheme.textColorPrimary,
 		fontSize: 15,
 		fontWeight: "bold",
 	},
 	feedCardDate: {
 		marginTop: 5,
 		fontSize: 10,
-		color: "gray",
+		color: lightTheme.textColorSecondary,
 	},
 	feedCardDesc: {
-		color: "gray",
+		color: lightTheme.textColorSecondary,
 		overflow: "hidden",
 	},
 });

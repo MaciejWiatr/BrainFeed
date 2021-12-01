@@ -4,7 +4,12 @@ import FeedCard from "../components/FeedCard";
 import FeedForm from "../components/FeedForm";
 import { NotificationWrapper } from "../../notifications";
 import useFeedItems from "../store/useFeedItems";
-import { useThemableStyles, useTheme } from "@features/theme";
+import {
+	darkTheme,
+	lightTheme,
+	useThemableStyles,
+	useTheme,
+} from "@features/theme";
 
 export default function FeedScreen() {
 	const { isDark } = useTheme();
@@ -37,7 +42,7 @@ export default function FeedScreen() {
 
 const darkStyles = StyleSheet.create({
 	feedList: {
-		backgroundColor: "#202020",
+		backgroundColor: darkTheme.backgroundColor,
 	},
 });
 
@@ -45,7 +50,7 @@ const styles = StyleSheet.create({
 	container: {
 		position: "relative",
 		flex: 1,
-		backgroundColor: "#eeeeee",
+		backgroundColor: lightTheme.backgroundColor,
 		alignItems: "center",
 		justifyContent: "center",
 	},

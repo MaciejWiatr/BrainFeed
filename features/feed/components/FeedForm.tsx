@@ -1,19 +1,21 @@
-import { BlurView } from "@react-native-community/blur";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import {
 	StyleSheet,
 	Text,
 	TextInput,
-	TouchableNativeFeedback,
 	TouchableOpacity,
 	View,
 } from "react-native";
 import useFeedItems from "../store/useFeedItems";
-import useTheme from "../../theme/hooks/useTheme";
-import { useThemableStyles } from "../../theme";
+import {
+	darkTheme,
+	lightTheme,
+	useThemableStyles,
+	useTheme,
+} from "@features/theme";
 import * as Clipboard from "expo-clipboard";
-import { useNotifications } from "../../notifications";
+import { useNotifications } from "@features/notifications";
 
 const FeedForm = () => {
 	const notify = useNotifications();
@@ -113,7 +115,7 @@ const darkStyles = StyleSheet.create({
 		backgroundColor: "rgba(0,0,0,0)",
 	},
 	blurWrapper: {
-		backgroundColor: "#303030",
+		backgroundColor: darkTheme.cardBgColor,
 		borderWidth: 0,
 	},
 });
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
 		overflow: "hidden",
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
-		backgroundColor: "#eeeeee",
+		backgroundColor: lightTheme.cardBgColor,
 		borderColor: "#dddddd",
 		borderWidth: 0.8,
 		borderBottomWidth: 0,
