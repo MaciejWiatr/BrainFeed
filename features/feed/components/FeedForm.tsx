@@ -10,10 +10,10 @@ import {
 	View,
 } from "react-native";
 import useFeedItems from "../store/useFeedItems";
-import useTheme from "../store/useTheme";
-import { useThemableStyles } from "../features/theme";
+import useTheme from "../../theme/hooks/useTheme";
+import { useThemableStyles } from "../../theme";
 import * as Clipboard from "expo-clipboard";
-import { useNotifications } from "../features/notifications";
+import { useNotifications } from "../../notifications";
 
 const FeedForm = () => {
 	const notify = useNotifications();

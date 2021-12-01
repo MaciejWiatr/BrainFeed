@@ -2,12 +2,11 @@ import React from "react";
 import { FlatList, StyleSheet, View, Text } from "react-native";
 import FeedCard from "../components/FeedCard";
 import FeedForm from "../components/FeedForm";
-import { NotificationWrapper } from "../features/notifications";
+import { NotificationWrapper } from "../../notifications";
 import useFeedItems from "../store/useFeedItems";
-import useTheme from "../store/useTheme";
-import { useThemableStyles } from "../features/theme/";
+import { useThemableStyles, useTheme } from "@features/theme";
 
-export default function HomeScreen() {
+export default function FeedScreen() {
 	const { isDark } = useTheme();
 	const { items } = useFeedItems();
 	const { s } = useThemableStyles(isDark);

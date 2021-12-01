@@ -1,16 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
-import {
-	Box,
-	CheckIcon,
-	HStack,
-	Select,
-	Text,
-	VStack,
-	ScrollView,
-} from "native-base";
+import { HStack, Select, Text, VStack, ScrollView } from "native-base";
 import { Feather } from "@expo/vector-icons";
-import useTheme from "../store/useTheme";
+import { useTheme } from "@features/theme";
 
 const SettingsScreen = () => {
 	let [service, setService] = useState("true");

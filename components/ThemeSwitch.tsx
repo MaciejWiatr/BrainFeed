@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Switch, useColorMode } from "native-base";
-import useTheme from "../store/useTheme";
+import { useTheme } from "../features/theme";
 
 const ThemeSwitch = () => {
 	const { toggleTheme, isDark } = useTheme();

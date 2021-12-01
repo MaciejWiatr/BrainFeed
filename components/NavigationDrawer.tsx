@@ -6,9 +6,8 @@ import {
 } from "@react-navigation/drawer";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
-import useTheme from "../store/useTheme";
 import { useTheme as useRNTheme } from "@react-navigation/native";
-import useThemableStyles from "../features/theme/hooks/useThemableStyles";
+import { useThemableStyles, useTheme } from "../features/theme";
 import { Ionicons } from "@expo/vector-icons";
 
 const NavigationDrawer = (props: DrawerContentComponentProps) => {

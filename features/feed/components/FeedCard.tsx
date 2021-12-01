@@ -8,8 +8,7 @@ import Animated, {
 	useSharedValue,
 	withSpring,
 } from "react-native-reanimated";
-import useTheme from "../store/useTheme";
-import { useThemableStyles } from "../features/theme/";
+import { useThemableStyles, useTheme } from "@features/theme";
 
 interface IProps {
 	image: string;

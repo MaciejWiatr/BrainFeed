@@ -6,8 +6,7 @@ import {
 	View,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import useTheme from "../store/useTheme";
-import { useThemableStyles } from "../features/theme/";
+import { useThemableStyles, useTheme } from "../features/theme/";
 import { useNavigation, DrawerActions } from "@react-navigation/core";
 
 const DrawerButton = () => {
