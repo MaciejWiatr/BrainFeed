@@ -16,6 +16,8 @@ import {
 } from "@features/theme";
 import * as Clipboard from "expo-clipboard";
 import { useNotifications } from "@features/notifications";
+import { useMutation, useQueryClient } from "react-query";
+import { uploadLink } from "../api";
 
 const FeedForm = () => {
 	const notify = useNotifications();
@@ -23,6 +25,10 @@ const FeedForm = () => {
 	const { isDark } = useTheme();
 	const { s, t } = useThemableStyles(isDark);
 	const [initialUrlValue, setInitialUrlValue] = useState("");
+	const queryClient = useQueryClient()
+	const {mutate} = useMutation((url:string)=>uploadLink(url), {onSuccess: ()=>{
+		queryClient.invalidateQueries("feed")
+	}})
 
 	useEffect(() => {
 		const checkClipboardContainsUrl = async () => {
@@ -44,14 +50,15 @@ const FeedForm = () => {
 				enableReinitialize
 				initialValues={{ url: initialUrlValue }}
 				onSubmit={(values, { resetForm }) => {
-					addItem({
-						id: Math.floor(Math.random() * 20000),
-						description: "bonjour meine friend",
-						title: values.url,
-						image: "https://placeimg.com/640/480/tech",
-						uploadDate: new Date(),
-					});
-					notify({ message: "Link was added", type: "success" });
+					mutate(values.url)
+					// addItem({
+					// 	id: Math.floor(Math.random() * 20000),
+					// 	description: "bonjour meine friend",
+					// 	title: values.url,
+					// 	image: "https://placeimg.com/640/480/tech",
+					// 	uploadDate: new Date(),
+					// });
+					// notify({ message: "Link was added", type: "success" });
 					setInitialUrlValue("");
 					resetForm();
 				}}

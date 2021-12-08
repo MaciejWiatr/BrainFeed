@@ -10,30 +10,35 @@ import {
 	useThemableStyles,
 	useTheme,
 } from "@features/theme";
+import { useQuery } from "react-query";
+import { fetchFeed } from "../api";
+import { FeedItemResp } from "../types/FeedItemResp";
 
 export default function FeedScreen() {
 	const { isDark } = useTheme();
 	const { items } = useFeedItems();
 	const { s } = useThemableStyles(isDark);
+	const {data,error, isLoading} = useQuery("feed",fetchFeed )
+
 	return (
 		<View style={styles.container}>
 			<NotificationWrapper>
-				<FlatList
+				{!isLoading && <FlatList
 					style={s(styles.feedList, darkStyles.feedList)}
 					contentContainerStyle={styles.feedListContent}
-					data={items}
-					keyExtractor={(item) => item.id.toString()}
+					data={data}
+					keyExtractor={(item) => item._id.toString()}
 					renderItem={({ item }) => (
 						<FeedCard
-							key={item.id}
-							image={item.image}
+							key={item._id}
+							image={item.imageUrl}
 							title={item.title}
 							description={item.description}
-							uploadDate={item.uploadDate}
+							uploadDate={new Date()}
 						/>
 					)}
 					inverted
-				></FlatList>
+				></FlatList>}
 				<FeedForm />
 			</NotificationWrapper>
 		</View>

@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, {
-	FadeOut,
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
@@ -19,7 +18,7 @@ const Notification = ({ children }: { children: ReactNode }) => {
 	}));
 
 	return (
-		<Animated.View exiting={FadeOut} style={styles.container}>
+		<Animated.View style={styles.container}>
 			<Animated.View style={[styles.bubble, bubbleAnimatedStyle]}>
 				<Text style={styles.bubbleText}>{children}</Text>
 			</Animated.View>
