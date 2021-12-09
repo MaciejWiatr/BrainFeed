@@ -18,27 +18,31 @@ export default function FeedScreen() {
 	const { isDark } = useTheme();
 	const { items } = useFeedItems();
 	const { s } = useThemableStyles(isDark);
-	const {data,error, isLoading} = useQuery("feed",fetchFeed )
+	const { data, error, isLoading } = useQuery("feed", fetchFeed);
 
 	return (
 		<View style={styles.container}>
 			<NotificationWrapper>
-				{!isLoading && <FlatList
-					style={s(styles.feedList, darkStyles.feedList)}
-					contentContainerStyle={styles.feedListContent}
-					data={data}
-					keyExtractor={(item) => item._id.toString()}
-					renderItem={({ item }) => (
-						<FeedCard
-							key={item._id}
-							image={item.imageUrl}
-							title={item.title}
-							description={item.description}
-							uploadDate={new Date()}
-						/>
-					)}
-					inverted
-				></FlatList>}
+				{!isLoading && (
+					<FlatList
+						style={s(styles.feedList, darkStyles.feedList)}
+						contentContainerStyle={styles.feedListContent}
+						data={data}
+						keyExtractor={(item) => item._id.toString()}
+						renderItem={({ item }) => (
+							<FeedCard
+								key={item._id}
+								id={item._id}
+								image={item.imageUrl}
+								title={item.title}
+								description={item.description}
+								read={item.read}
+								uploadDate={new Date()}
+							/>
+						)}
+						inverted
+					></FlatList>
+				)}
 				<FeedForm />
 			</NotificationWrapper>
 		</View>

@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
@@ -14,15 +14,27 @@ import {
 	lightTheme,
 	darkTheme,
 } from "@features/theme";
+import { useMutation, useQueryClient } from "react-query";
+import { markAsRead } from "../api";
+import { FeedItemResp } from "../types/FeedItemResp";
 
 interface IProps {
+	id: string;
 	image: string;
 	title: string;
 	description: string;
 	uploadDate: Date;
+	read: boolean;
 }
 
-const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
+const FeedCard: FC<IProps> = ({
+	image,
+	title,
+	description,
+	uploadDate,
+	read,
+	id,
+}) => {
 	const { isDark } = useTheme();
 	const { s } = useThemableStyles(isDark);
 	const maxHeight = useSharedValue(100);
@@ -31,8 +43,47 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 	const startingPosition = 0;
 	const x = useSharedValue(startingPosition);
 	const pressed = useSharedValue(false);
-	const [collapsed, setCollapsed] = useState(false);
+	const [collapsed, setCollapsed] = useState(read);
 	const descInitialHeight = useSharedValue(0);
+	const queryClient = useQueryClient();
+	const { mutateAsync } = useMutation<FeedItemResp[]>(markAsRead, {
+		onMutate: async (id) => {
+			await queryClient.cancelQueries("feed");
+			const previousFeed =
+				queryClient.getQueryData<FeedItemResp[]>("feed");
+			queryClient.setQueryData<FeedItemResp[]>("feed", (old) => {
+				if (!old) return [];
+				const newFeed = [...old];
+				newFeed.find(({ _id: feedId }) => feedId === id)!.read =
+					!newFeed.find(({ _id: feedId }) => feedId === id)!.read;
+				return newFeed;
+			});
+
+			return { previousFeed };
+		},
+		onError: (
+			err,
+			newTodo,
+			context: { previousFeed: FeedItemResp[]; [name: string]: unknown }
+		) => {
+			queryClient.setQueryData("feed", context.previousFeed);
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries("feed");
+		},
+	});
+
+	useEffect(() => {
+		if (collapsed) {
+			maxHeight.value = 0;
+			maxCollapseIndicatorHeight.value = 50;
+			maxDescHeight.value = 0;
+		} else {
+			maxHeight.value = 100;
+			maxCollapseIndicatorHeight.value = 0;
+			maxDescHeight.value = descInitialHeight.value;
+		}
+	}, []);
 
 	const eventHandler = useAnimatedGestureHandler({
 		onStart: (event, ctx) => {
@@ -51,6 +102,7 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 					stiffness: 200,
 				});
 				runOnJS(setCollapsed)(true);
+				runOnJS(mutateAsync)(id);
 			} else {
 				maxHeight.value = withSpring(100);
 				maxCollapseIndicatorHeight.value = withSpring(0, {
@@ -59,6 +111,7 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 				});
 				maxDescHeight.value = withSpring(descInitialHeight.value);
 				runOnJS(setCollapsed)(false);
+				runOnJS(mutateAsync)(id);
 			}
 			x.value = withSpring(startingPosition);
 		},
@@ -101,7 +154,11 @@ const FeedCard: FC<IProps> = ({ image, title, description, uploadDate }) => {
 			>
 				<Animated.Image
 					style={[{ width: "100%", height: 100 }, useCollapseStyle]}
-					source={{ uri: image || "https://zwierzetarnia.pl/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png" }}
+					source={{
+						uri:
+							image ||
+							"https://zwierzetarnia.pl/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png",
+					}}
 				/>
 				<View style={styles.feedCardTextWrapper}>
 					<Animated.Text
