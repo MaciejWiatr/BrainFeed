@@ -68,9 +68,6 @@ const FeedCard: FC<IProps> = ({
 		) => {
 			queryClient.setQueryData("feed", context.previousFeed);
 		},
-		onSettled: () => {
-			queryClient.invalidateQueries("feed");
-		},
 	});
 
 	useEffect(() => {

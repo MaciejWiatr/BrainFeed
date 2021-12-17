@@ -16,30 +16,36 @@ import { FeedItemResp } from "../types/FeedItemResp";
 
 export default function FeedScreen() {
 	const { isDark } = useTheme();
-	const { items } = useFeedItems();
 	const { s } = useThemableStyles(isDark);
-	const { data, error, isLoading } = useQuery("feed", fetchFeed);
+	const { data, error, isLoading, isFetched } = useQuery("feed", fetchFeed);
+
+	const memoizedData = React.useMemo(() => data, [data]);
+
+	const memoizedRenderItem = React.useCallback(
+		({ item }) => (
+			<FeedCard
+				id={item._id}
+				image={item.imageUrl}
+				title={item.title}
+				description={item.description}
+				uploadDate={new Date()}
+				read={item.read}
+			/>
+		),
+		[data]
+	);
 
 	return (
 		<View style={styles.container}>
 			<NotificationWrapper>
-				{!isLoading && (
+				{isFetched && (
 					<FlatList
 						style={s(styles.feedList, darkStyles.feedList)}
 						contentContainerStyle={styles.feedListContent}
-						data={data}
+						initialNumToRender={5}
+						data={memoizedData}
 						keyExtractor={(item) => item._id.toString()}
-						renderItem={({ item }) => (
-							<FeedCard
-								key={item._id}
-								id={item._id}
-								image={item.imageUrl}
-								title={item.title}
-								description={item.description}
-								read={item.read}
-								uploadDate={new Date()}
-							/>
-						)}
+						renderItem={memoizedRenderItem}
 						inverted
 					></FlatList>
 				)}

@@ -1,7 +1,9 @@
 import React, { ReactNode, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, {
+	useAnimatedReaction,
 	useAnimatedStyle,
+	useCode,
 	useSharedValue,
 	withSpring,
 } from "react-native-reanimated";
@@ -11,7 +13,7 @@ const Notification = ({ children }: { children: ReactNode }) => {
 
 	useEffect(() => {
 		y.value = withSpring(0);
-	});
+	}, []);
 
 	const bubbleAnimatedStyle = useAnimatedStyle(() => ({
 		transform: [{ translateY: y.value }],
