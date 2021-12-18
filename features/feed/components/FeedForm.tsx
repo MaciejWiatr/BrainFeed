@@ -18,6 +18,7 @@ import * as Clipboard from "expo-clipboard";
 import { useNotifications } from "@features/notifications";
 import { useMutation, useQueryClient } from "react-query";
 import { uploadLink } from "../api";
+import feedFormSchema from "../validators/feedform.validator";
 
 const FeedForm = () => {
 	const notify = useNotifications();
@@ -34,20 +35,17 @@ const FeedForm = () => {
 
 	useEffect(() => {
 		const checkClipboardContainsUrl = async () => {
-			let clip = "";
 			try {
-				clip = await Clipboard.getStringAsync();
+				const clip = await Clipboard.getStringAsync();
+				if (!clip.includes("http")) return;
+				setInitialUrlValue(clip);
+				notify({
+					message: "URL was copied from clipboard",
+					type: "success",
+				});
 			} catch (e) {
 				console.log("e");
 			}
-
-			if (!clip.includes("http")) return;
-
-			setInitialUrlValue(clip);
-			notify({
-				message: "URL was copied from clipboard",
-				type: "success",
-			});
 		};
 		checkClipboardContainsUrl();
 	}, []);
@@ -55,8 +53,11 @@ const FeedForm = () => {
 	return (
 		<View style={styles.formContainer}>
 			<Formik
+				validateOnBlur={false}
+				validateOnChange={false}
 				enableReinitialize
 				initialValues={{ url: initialUrlValue }}
+				validationSchema={feedFormSchema}
 				onSubmit={(values, { resetForm }) => {
 					mutate(values.url.trim());
 					notify({ message: "Link was added", type: "success" });
@@ -64,44 +65,73 @@ const FeedForm = () => {
 					resetForm();
 				}}
 			>
-				{({ handleChange, handleBlur, handleSubmit, values }) => (
-					<View style={s(styles.blurWrapper, darkStyles.blurWrapper)}>
-						{/* <BlurView
-							blurType={t("xlight", "dark")}
-							blurAmount={80}
-							style={styles.formBlur}
-							reducedTransparencyFallbackColor="white"
-						/> */}
-						<View style={styles.formWrapper}>
-							<TextInput
-								placeholder="Some fancy url ✨"
-								onChangeText={handleChange("url")}
-								onBlur={handleBlur("url")}
-								value={values.url}
-								placeholderTextColor={t("gray", "#909090")}
-								style={s(
-									styles.formInput,
-									darkStyles.formInput
-								)}
-							/>
-							<TouchableOpacity
-								style={s(
-									styles.formButton,
-									darkStyles.formButton
-								)}
-								onPress={() => handleSubmit()}
-							>
-								<Text
-									style={s(
-										styles.formButtonText,
-										darkStyles.formButtonText
-									)}
-								>
-									Send
+				{({
+					handleChange,
+					handleBlur,
+					handleSubmit,
+					values,
+					errors,
+					touched,
+				}) => (
+					<>
+						{errors.url && (
+							<View style={styles.errorContainer}>
+								<Text style={styles.errorText}>
+									{errors.url}
 								</Text>
-							</TouchableOpacity>
+							</View>
+						)}
+
+						<View
+							style={s(
+								styles.blurWrapper,
+								darkStyles.blurWrapper
+							)}
+						>
+							<View style={styles.formWrapper}>
+								<TextInput
+									placeholder={
+										errors.url
+											? errors.url
+											: "Some fancy url ✨"
+									}
+									onChangeText={handleChange("url")}
+									onBlur={handleBlur("url")}
+									value={values.url}
+									placeholderTextColor={
+										errors.url
+											? "#d35400"
+											: t("gray", "#909090")
+									}
+									style={[
+										s(
+											styles.formInput,
+											darkStyles.formInput
+										),
+										errors.url && touched.url
+											? { borderColor: "#d35400" }
+											: {},
+									]}
+								/>
+								<TouchableOpacity
+									style={s(
+										styles.formButton,
+										darkStyles.formButton
+									)}
+									onPress={() => handleSubmit()}
+								>
+									<Text
+										style={s(
+											styles.formButtonText,
+											darkStyles.formButtonText
+										)}
+									>
+										Send
+									</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
-					</View>
+					</>
 				)}
 			</Formik>
 		</View>
@@ -129,10 +159,28 @@ const darkStyles = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
+	errorContainer: {
+		position: "absolute",
+		top: -25,
+		backgroundColor: "#e74c3c",
+		width: "100%",
+		height: 50,
+		display: "flex",
+		flexDirection: "row",
+		paddingTop: 5,
+		justifyContent: "center",
+		borderTopLeftRadius: 15,
+		borderTopRightRadius: 15,
+	},
+	errorText: {
+		color: "white",
+		fontWeight: "bold",
+		fontSize: 12,
+	},
 	formContainer: {
 		width: "100%",
 		position: "absolute",
-		overflow: "hidden",
+		// overflow: "hidden",
 		minHeight: 80,
 		bottom: 0,
 	},

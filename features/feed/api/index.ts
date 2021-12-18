@@ -5,13 +5,13 @@ const backendUrl = process.env.BACKEND_URL;
 
 console.log(backendUrl);
 
-const fetchFeed = () =>
+const fetchFeed = async () =>
 	axios
 		.get<FeedItemResp[]>(`${backendUrl}/link`)
 		.then((res) => res.data)
 		.catch((err) => console.log(err));
 
-const uploadLink = (url: string) =>
+const uploadLink = async (url: string) =>
 	axios
 		.post(`${backendUrl}/link`, {
 			url,
@@ -19,7 +19,7 @@ const uploadLink = (url: string) =>
 		})
 		.then((res) => res.data);
 
-const markAsRead = (id: string) =>
+const markAsRead = async (id: string) =>
 	axios
 		.post<FeedItemResp[]>(`${backendUrl}/link/${id}/read`)
 		.then((res) => res.data);

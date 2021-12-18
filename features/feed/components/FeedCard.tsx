@@ -51,13 +51,6 @@ const FeedCard: FC<IProps> = ({
 			await queryClient.cancelQueries("feed");
 			const previousFeed =
 				queryClient.getQueryData<FeedItemResp[]>("feed");
-			queryClient.setQueryData<FeedItemResp[]>("feed", (old) => {
-				if (!old) return [];
-				const newFeed = [...old];
-				newFeed.find(({ _id: feedId }) => feedId === id)!.read =
-					!newFeed.find(({ _id: feedId }) => feedId === id)!.read;
-				return newFeed;
-			});
 
 			return { previousFeed };
 		},

@@ -17,23 +17,7 @@ import { FeedItemResp } from "../types/FeedItemResp";
 export default function FeedScreen() {
 	const { isDark } = useTheme();
 	const { s } = useThemableStyles(isDark);
-	const { data, error, isLoading, isFetched } = useQuery("feed", fetchFeed);
-
-	const memoizedData = React.useMemo(() => data, [data]);
-
-	const memoizedRenderItem = React.useCallback(
-		({ item }) => (
-			<FeedCard
-				id={item._id}
-				image={item.imageUrl}
-				title={item.title}
-				description={item.description}
-				uploadDate={new Date()}
-				read={item.read}
-			/>
-		),
-		[data]
-	);
+	const { data, isFetched } = useQuery("feed", fetchFeed);
 
 	return (
 		<View style={styles.container}>
@@ -43,9 +27,18 @@ export default function FeedScreen() {
 						style={s(styles.feedList, darkStyles.feedList)}
 						contentContainerStyle={styles.feedListContent}
 						initialNumToRender={5}
-						data={memoizedData}
+						data={data}
 						keyExtractor={(item) => item._id.toString()}
-						renderItem={memoizedRenderItem}
+						renderItem={({ item }) => (
+							<FeedCard
+								id={item._id}
+								image={item.imageUrl}
+								title={item.title}
+								description={item.description}
+								uploadDate={new Date("2002-02-10")}
+								read={item.read}
+							/>
+						)}
 						inverted
 					></FlatList>
 				)}
