@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { FeedItemResp } from "./../types/FeedItemResp";
 
@@ -15,7 +16,6 @@ const uploadLink = async (url: string) =>
 	axios
 		.post(`${backendUrl}/link`, {
 			url,
-			description: "Sint in esse nisi aliquip cupidatat ad.",
 		})
 		.then((res) => res.data);
 

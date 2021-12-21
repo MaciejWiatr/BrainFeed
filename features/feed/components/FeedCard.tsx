@@ -1,6 +1,16 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+	Linking,
+	StyleSheet,
+	Text,
+	TouchableWithoutFeedback,
+	View,
+} from "react-native";
+import {
+	PanGestureHandler,
+	TapGestureHandler,
+	TouchableOpacity,
+} from "react-native-gesture-handler";
 import Animated, {
 	runOnJS,
 	useAnimatedGestureHandler,
@@ -25,6 +35,7 @@ interface IProps {
 	description: string;
 	uploadDate: Date;
 	read: boolean;
+	url: string;
 }
 
 const FeedCard: FC<IProps> = ({
@@ -34,6 +45,7 @@ const FeedCard: FC<IProps> = ({
 	uploadDate,
 	read,
 	id,
+	url,
 }) => {
 	const { isDark } = useTheme();
 	const { s } = useThemableStyles(isDark);
@@ -131,6 +143,10 @@ const FeedCard: FC<IProps> = ({
 		};
 	});
 
+	const openLink = () => {
+		Linking.openURL(url);
+	};
+
 	return (
 		<PanGestureHandler
 			onGestureEvent={eventHandler}
@@ -142,49 +158,56 @@ const FeedCard: FC<IProps> = ({
 					useSlidingAnimationStyles,
 				]}
 			>
-				<Animated.Image
-					style={[{ width: "100%", height: 100 }, useCollapseStyle]}
-					source={{
-						uri:
-							image ||
-							"https://zwierzetarnia.pl/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png",
-					}}
-				/>
-				<View style={styles.feedCardTextWrapper}>
-					<Animated.Text
+				<TouchableWithoutFeedback onPress={openLink}>
+					<Animated.Image
 						style={[
-							useCollapseTextIndicatorStyle,
-							{ color: "#27ae60" },
+							{ width: "100%", height: 100 },
+							useCollapseStyle,
 						]}
-					>
-						Marked as read
-					</Animated.Text>
-					<Text
-						style={s(
-							styles.feedCardTitle,
-							darkStyles.feedCardTitle
-						)}
-					>
-						{title}
-					</Text>
-					<Animated.Text
-						onLayout={(evt) => {
-							if (!descInitialHeight.value) {
-								descInitialHeight.value =
-									evt.nativeEvent.layout.height;
-							}
+						source={{
+							uri:
+								image ||
+								"https://zwierzetarnia.pl/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png",
 						}}
-						style={[
-							s(styles.feedCardDesc, darkStyles.feedCardDesc),
-							useDescriptionAnimatedStyles,
-						]}
-					>
-						{description}
-					</Animated.Text>
-					<Text style={styles.feedCardDate}>
-						{JSON.stringify(uploadDate)}
-					</Text>
-				</View>
+					/>
+				</TouchableWithoutFeedback>
+				<TouchableWithoutFeedback onPress={openLink}>
+					<View style={styles.feedCardTextWrapper}>
+						<Animated.Text
+							style={[
+								useCollapseTextIndicatorStyle,
+								{ color: "#27ae60" },
+							]}
+						>
+							Marked as read
+						</Animated.Text>
+						<Text
+							style={s(
+								styles.feedCardTitle,
+								darkStyles.feedCardTitle
+							)}
+						>
+							{title}
+						</Text>
+						<Animated.Text
+							onLayout={(evt) => {
+								if (!descInitialHeight.value) {
+									descInitialHeight.value =
+										evt.nativeEvent.layout.height;
+								}
+							}}
+							style={[
+								s(styles.feedCardDesc, darkStyles.feedCardDesc),
+								useDescriptionAnimatedStyles,
+							]}
+						>
+							{description}
+						</Animated.Text>
+						<Text style={styles.feedCardDate}>
+							{new Date(uploadDate).toLocaleDateString("pl-PL")}
+						</Text>
+					</View>
+				</TouchableWithoutFeedback>
 			</Animated.View>
 		</PanGestureHandler>
 	);

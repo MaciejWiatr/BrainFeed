@@ -31,6 +31,9 @@ const FeedForm = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries("feed");
 		},
+		onError: () => {
+			notify({ message: "Error uploading link", type: "error" });
+		},
 	});
 
 	useEffect(() => {

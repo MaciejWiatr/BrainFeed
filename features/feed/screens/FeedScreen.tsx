@@ -12,17 +12,16 @@ import {
 } from "@features/theme";
 import { useQuery } from "react-query";
 import { fetchFeed } from "../api";
-import { FeedItemResp } from "../types/FeedItemResp";
 
 export default function FeedScreen() {
 	const { isDark } = useTheme();
 	const { s } = useThemableStyles(isDark);
-	const { data, isFetched } = useQuery("feed", fetchFeed);
+	const { data } = useQuery("feed", fetchFeed, { refetchOnMount: true });
 
 	return (
 		<View style={styles.container}>
 			<NotificationWrapper>
-				{isFetched && (
+				{data && (
 					<FlatList
 						style={s(styles.feedList, darkStyles.feedList)}
 						contentContainerStyle={styles.feedListContent}
@@ -35,8 +34,9 @@ export default function FeedScreen() {
 								image={item.imageUrl}
 								title={item.title}
 								description={item.description}
-								uploadDate={new Date("2002-02-10")}
+								uploadDate={item.createdAt}
 								read={item.read}
+								url={item.url}
 							/>
 						)}
 						inverted
