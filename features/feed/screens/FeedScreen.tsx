@@ -2,34 +2,46 @@ import React from "react";
 import { FlatList, StyleSheet, View, Text } from "react-native";
 import FeedCard from "../components/FeedCard";
 import FeedForm from "../components/FeedForm";
-import { NotificationWrapper } from "../features/notifications";
+import { NotificationWrapper } from "../../notifications";
 import useFeedItems from "../store/useFeedItems";
-import useTheme from "../store/useTheme";
-import useThemableStyles from "../utils/useThemableStyles";
+import {
+	darkTheme,
+	lightTheme,
+	useThemableStyles,
+	useTheme,
+} from "@features/theme";
+import { useQuery } from "react-query";
+import { fetchFeed } from "../api";
 
-export default function HomeScreen() {
+export default function FeedScreen() {
 	const { isDark } = useTheme();
-	const { items } = useFeedItems();
 	const { s } = useThemableStyles(isDark);
+	const { data } = useQuery("feed", fetchFeed, { refetchOnMount: true });
+
 	return (
 		<View style={styles.container}>
 			<NotificationWrapper>
-				<FlatList
-					style={s(styles.feedList, darkStyles.feedList)}
-					contentContainerStyle={styles.feedListContent}
-					data={items}
-					keyExtractor={(item) => item.id.toString()}
-					renderItem={({ item }) => (
-						<FeedCard
-							key={item.id}
-							image={item.image}
-							title={item.title}
-							description={item.description}
-							uploadDate={item.uploadDate}
-						/>
-					)}
-					inverted
-				></FlatList>
+				{data && (
+					<FlatList
+						style={s(styles.feedList, darkStyles.feedList)}
+						contentContainerStyle={styles.feedListContent}
+						initialNumToRender={5}
+						data={data}
+						keyExtractor={(item) => item._id.toString()}
+						renderItem={({ item }) => (
+							<FeedCard
+								id={item._id}
+								image={item.imageUrl}
+								title={item.title}
+								description={item.description}
+								uploadDate={item.createdAt}
+								read={item.read}
+								url={item.url}
+							/>
+						)}
+						inverted
+					></FlatList>
+				)}
 				<FeedForm />
 			</NotificationWrapper>
 		</View>
@@ -38,7 +50,7 @@ export default function HomeScreen() {
 
 const darkStyles = StyleSheet.create({
 	feedList: {
-		backgroundColor: "#202020",
+		backgroundColor: darkTheme.backgroundColor,
 	},
 });
 
@@ -46,7 +58,7 @@ const styles = StyleSheet.create({
 	container: {
 		position: "relative",
 		flex: 1,
-		backgroundColor: "#eeeeee",
+		backgroundColor: lightTheme.backgroundColor,
 		alignItems: "center",
 		justifyContent: "center",
 	},

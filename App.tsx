@@ -5,36 +5,56 @@ import {
 	NavigationContainer,
 } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import DrawerButton from "./components/DrawerButton";
 import NavigationDrawer from "./components/NavigationDrawer";
 import ThemeSwitch from "./components/ThemeSwitch";
-import HomeScreen from "./screens/HomeScreen";
-import SettingsScreen from "./screens/SettingsScreen";
-import useTheme from "./store/useTheme";
+import { FeedScreen } from "@features/feed";
+import { SettingsScreen } from "@features/settings";
+import { useTheme } from "@features/theme";
+import { NativeBaseProvider } from "native-base";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { LogBox } from "react-native";
+import generateAuthToken from "./utils/generateAuthToken";
+import registerAuthInterceptors from "./utils/registerAuthInterceptors";
 
+const queryClient = new QueryClient();
 const Drawer = createDrawerNavigator();
+LogBox.ignoreLogs(["Setting a timer"]);
+registerAuthInterceptors();
+
+(async () => {
+	await generateAuthToken();
+})();
+
 export default function App() {
 	const { isDark } = useTheme();
+
 	return (
-		<NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
-			<StatusBar style={isDark ? "light" : "dark"} />
-			<Drawer.Navigator
-				initialRouteName="Feed"
-				screenOptions={{
-					headerTitleAlign: "center",
-					headerRight: () => <ThemeSwitch />,
-					headerLeft: () => <DrawerButton />,
-				}}
-				drawerContent={(props) => <NavigationDrawer {...props} />}
-			>
-				<Drawer.Screen name="Feed" component={HomeScreen} />
-				<Drawer.Screen
-					name="Settings"
-					component={SettingsScreen}
-					options={{ drawerItemStyle: { display: "none" } }}
-				/>
-			</Drawer.Navigator>
-		</NavigationContainer>
+		<QueryClientProvider client={queryClient}>
+			<NativeBaseProvider>
+				<NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
+					<StatusBar style={isDark ? "light" : "dark"} />
+					<Drawer.Navigator
+						initialRouteName="Feed"
+						screenOptions={{
+							headerTitleAlign: "center",
+							headerRight: () => <ThemeSwitch />,
+							headerLeft: () => <DrawerButton />,
+						}}
+						drawerContent={(props) => (
+							<NavigationDrawer {...props} />
+						)}
+					>
+						<Drawer.Screen name="Feed" component={FeedScreen} />
+						<Drawer.Screen
+							name="Settings"
+							component={SettingsScreen}
+							options={{ drawerItemStyle: { display: "none" } }}
+						/>
+					</Drawer.Navigator>
+				</NavigationContainer>
+			</NativeBaseProvider>
+		</QueryClientProvider>
 	);
 }
